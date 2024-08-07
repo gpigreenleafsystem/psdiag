@@ -20,53 +20,62 @@
 		@endif
           </div>
 	  <div class="card-body">
+ <table id="datatable" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="font-size: 1.05em; font-weight: 600;" class="text-left">Patient Name</th>
+                                <th style="font-size: 1.05em; font-weight: 600;" class="text-left">Contact No</th>
+                                <th style="font-size: 1.05em; font-weight: 600;" class="text-left">Date</th>
+                                <th style="font-size: 1.05em; font-weight: 600;" class="text-left">Status</th>
+                                <th style="font-size: 1.05em; font-weight: 600;" class="disabled-sorting text-left">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-	<table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
-              <thead>
-                <tr>
-                  <th>Patient</th>
-                  <th>Date</th>
-                  <th>Status</th>
-		  <!--th></th>
-		 <th>Amount</th>
-		 <th>Discount</th>
-		<th>Report_status</th>
-		<th>Scanning_status</th-->
-                  <th class="disabled-sorting text-right">Actions</th>
-                </tr>
-	      </thead>
-	@foreach($apdetails as $data)
-		<tr>
-                    <td>
-                      <!--span class="avatar avatar-sm rounded-circle">
-                        <img src="{{asset('assets')}}/img/default-avatar.png" alt="" style="max-width: 80px; border-radiu: 100px">
-                      </span--> {{ $data->patient->name }}
-                    </td>
-                    <td>{{$data->appointment_date}}</td>
-                    <td>{{$data->appointment_status}}</td>
-		    <!--td></td>
-		<td>2dsa</td>
-		<td>2dsa</td>
-		<td>2dsa</td>
-		<td>2dsa</td-->
-			<!-- write condition here if bill id doesnot exists in comments show button wlse show bill id -->
-		@if( empty($data->comments))
-                      <td class="text-left">
-                                             <a type="button" href="{{ route('newbilling', ['id' => $data->id]) }}" rel="tooltip" class="btn btn-info btn-large" data-original-title="" title="">
-			<!--i class="now-ui-icons ui-2_settings-90"></i-->
-			CREATE BILL
-                      </a>
-                      </td>
-		
-		@else
-		<td class="text-right"> {{$data->comments }}
-		</td>
-		
-		</tr>
-		@endif	
-		@endforeach
-                              </tbody>
-            </table>
+                            @for ($i = 0; $i < count($aptInfos); $i++) <tr>
+                                <td>{{ $aptInfos[$i]['patientName'] }}</td>
+                                <td>{{ $aptInfos[$i]['patientNo'] }}</td>
+                                <td>{{ $aptInfos[$i]['aptdate'] }}</td>
+                                <td>{{ $aptInfos[$i]['aptstatus'] }}</td>
+                                <td class="text-left">
+                                    @if($aptInfos[$i]['billstatus']==1)
+                                    <a type="button" href="{{ route('newbilling', ['id' => $aptInfos[$i]['id']]) }}"
+                                        rel="tooltip" class="btn btn-primary btn-large " data-original-title="" title=""
+                                        disabled>
+                                        Genarate Bill
+                                    </a>
+
+                                    <a type="button"
+                                        href="{{ route('newpayment', ['id' => $aptInfos[$i]['bill_no']]) }}"
+                                        rel="tooltip" class="btn btn-primary btn-large " data-original-title=""
+                                        title="Payment">
+
+                                        PAYMENT
+                                    </a>
+                                    @else
+                                    <a type="button" href="{{ route('newbilling', ['id' => $aptInfos[$i]['id']]) }}"
+                                        rel="tooltip" class="btn btn-primary btn-large " data-original-title="" title="">
+                                        Genarate Bill
+                                    </a>
+
+                                    <a type="button" href="" rel="tooltip" class="btn btn-primary btn-large "
+                                        data-original-title="" title="Payment" disabled>
+
+                                        PAYMENT
+                                    </a>
+
+
+
+                                    @endif
+                                </td>
+
+                                </tr>
+                                @endfor
+                        </tbody>
+                    </table>
+
+	
 
           </div> <!--card body-->
         </div> <!--card -->

@@ -137,7 +137,7 @@
 </select>
                                </div>
 
-                                <div class="input-group">
+                                <!--div class="input-group">
                                     <label for="datepicker1">Appointment Date:</label>
 				    <div class="input-group date" id="datepicker" data-target-input="nearest">
                                         <input type="text" id="datetimepicker1" class="form-control datetimepicker-input" name="selected_date" />
@@ -145,7 +145,24 @@
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
                                     </div>
-                                </div>
+				</div-->
+<div class="input-group">
+    <label for="datepicker">Select Date:</label>
+    <div class="input-group date" id="datepick" data-target-input="nearest">
+        <input type="text" id="datetimepicker1" class="form-control datetimepicker-input"  name="selected_date" />
+        <div class="input-group-append" data-target="#datepicker" >
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+    </div>
+</div>
+<div class="input-group">
+ <label for="time">Select Time:</label>
+<div class="input-group" id="timediv" >
+	<input type="text" id="time" class=" form-control bfh-timepicker"  name="selected_time" />
+<div class="input-group-append" data-target="#time" >
+            <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+	</div>
+</div>
 
                                 <div class="card-footer ">
 				    <button type="submit" class="btn btn-primary btn-round btn-lg">{{__('SAVE')}}</button>
@@ -159,16 +176,11 @@
         </div>
     </div>
     @endsection
-    @push('js')
 
 
 
-<!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
--->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
 
@@ -190,9 +202,51 @@
 
             });
         });
-    </script>
+    </script-->
 
-    @endpush
+@push('scripts')
+
+<link href=
+'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'
+          rel='stylesheet'>
+ 
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+ 
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">
+    </script>
+<link rel="stylesheet"   
+href="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"> 
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+	    $('#datetimepicker1').datepicker({
+            format: 'YYYY-MM-DD HH:mm:ss'
+    });
+	    $('#time').timepicker({
+        timeFormat: 'h:i a',
+        interval: 30,
+        minTime: '6:30am',
+        maxTime: '10:00pm',
+        defaultTime: '6:30',
+        startTime: '6:30',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true,
+        disableTimeRanges: [
+            ['12:00pm', '12:01pm']
+        ]
+    });
+
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+@endpush
 
 
 

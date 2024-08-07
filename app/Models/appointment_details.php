@@ -17,7 +17,9 @@ class appointment_details extends Model
 		'modality_id',
 		'appointment_status',
 		'comments',
-		'appointment_date'];
+		'appointment_date',
+		'start_time',
+		'end_time'];
 
 	public function patient()
     	{

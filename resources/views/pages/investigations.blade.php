@@ -53,7 +53,9 @@
 		@endforeach
                               </tbody>
             </table>
-
+	<div class="d-flex justify-content-center">
+                        {{ $invdet->links() }}
+                    </div>
           </div> <!--card body-->
         </div> <!--card -->
       </div> <!--col -->

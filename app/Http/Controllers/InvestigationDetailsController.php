@@ -12,7 +12,7 @@ class InvestigationDetailsController extends Controller
 	 public function index()
 	 {
 	//	 dd("hi");
-	    $invdet = Investigation_details::all();
+	    $invdet = Investigation_details::paginate(10);
 	    //dd($invdet);
 	    return view('pages.investigations')->with('invdet',$invdet);
 	    //return view('investigations', ['invdet' => $invdet]);

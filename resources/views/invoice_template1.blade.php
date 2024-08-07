@@ -68,20 +68,43 @@ SEX	:  <?php echo $order->gender?><br/>
 <!--table width="100%" height="70" border="0" class="table_pad"> <tr> <td > Date</td> <td> -->
 </div>
 <div>
-No. <t/> Investigation <t/> Charges <br/>
-*******************************************<br/>
+<table width="100%" class="table_pad">
+<thead>
+<tr>
+<th>No. </th><th> Investigation </th><th> Charges </th>
+</tr></thead>
+<tbody>
+<tr>
+*******************************************
+</tr>
+
 <?php 
+//print_r($order->scanningdetails);
 $i=1;
-foreach($order->scanningdetails as $inv){ ?>
-<?php echo $i ?> <t/>
-<?php echo $inv->description?> <t/>
-<?php echo $inv->cost ?> <t/>
-<?php } ?><br/><br/>
+for($i=0;$i<sizeof($order->scanningdetails);$i++){
+//	foreach($order->scanningdetails as $inv){ 
+?>
+<tr>
+<td><?php echo $i+1 ?> </td>
+<td><?php echo $order->scanningdetails[$i]->description?> </td>
+<td><?php echo $order->scanningdetails[$i]->cost ?> </td>
+<?php } ?>
+</tr>
+</tbody></table>
+<br/><br/>
 *******************************************<br/>
-Total Charges<t/><t/><?php echo $order->netamount; ?><br/>
-Advance Rs. <t/><t/><?php echo $order->partialpaymentamount; ?><br/>
-Total paid Rs. <t/><t/><?php echo $order->totpaidamount; ?><br/>
-Balance Rs <t/><t/><?php echo $order->balanceamount; ?><br/>
+<table width="100%" class="table_pad">
+<tbody>
+<tr>
+<td>Total Charges</td><td><?php echo $order->netamount; ?></td></tr>
+<tr>
+<td>Advance Rs. </td><td><?php echo $order->partialpaymentamount; ?></td></tr>
+<tr>
+<td>Total paid Rs. </td><td><?php echo $order->totpaidamount; ?></td></tr>
+<tr>
+<td>Balance Rs </td><td><?php echo $order->balanceamount; ?></td></tr>
+</tr>
+</tbody></table>
 <br/>
 Received by <t/><?php echo $order->paymentdetails;; ?><br/>
 *******************************************<br/>

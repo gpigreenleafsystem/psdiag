@@ -1,10 +1,10 @@
 @extends('layouts.app', [
-    'namePage' => 'Table List',
+    'namePage' => 'New Appointment',
     'class' => 'sidebar-mini',
-    'activePage' => 'table',
+    'activePage' => 'New appointment',
   ])
 @section('styles')
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<!--link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 <!--link rel="stylesheet" type="text/css" href="{{asset('node_modules/timepicker/jquery.timepicker.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('node_modules/js-datepicker/datepicker.css')}}"- ->
@@ -51,7 +51,7 @@
             </div->
           </div!- ->
         </div-->
-        <div class="col-md-8  mr-auto">
+        <div class="col-md-12  mr-auto">
           <div class="card card-signup text-center">
             <div class="card-header ">
               <h4 class="card-title">{{ __('Add New Appointment') }}</h4>
@@ -152,32 +152,33 @@
     <label for="datepicker">Select Date:</label>
     <div class="input-group date" id="datepick" data-target-input="nearest">
         <input type="text" id="datetimepicker1" class="form-control datetimepicker-input"  name="selected_date" />
-        <div class="input-group-append" data-target="#datepicker" data-toggle="datetimepicker">
+        <div class="input-group-append" data-target="#datepicker" >
             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
         </div>
     </div>
 </div>
 <div class="input-group">
-<!--div class="input-group-prepend">
-<div class="inpu-group-text">
-<i class="now-ui-icons users_single_02"></i
-</div--!>
+ <label for="time">Select Time:</label>
+<div class="input-group" id="timediv" >
+	<input type="text" id="time" class=" form-control bfh-timepicker"  name="selected_time" />
+<div class="input-group-append" data-target="#time" >
+            <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+	</div>
+</div>
+<!--select class="form-control scan-type" id="starttimesel" name="starttimesel" onchange="">
+                        <option value="">Select Time</option>
+                        <option value="630">6:30</option>
+		    </select-->
+</div>
+<div class="input-group">
 
 <select class="form-control" name="modality">
 
-<option value="MRI SCAN">MRI SCAN</option>
-<option value="CT SCAN">CT SCAN</option>
+<option value="MR">MRI SCAN</option>
+<option value="CT">CT SCAN</option>
 </select>
 
 </div>
-                <!--div class="form-check text-left">
-                  <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox">
-                    <span class="form-check-sign"></span>
-                    {{ __('I agree to the') }}
-                    <a href="#something">{{ __('terms and conditions') }}</a>.
-                  </label>
-                </div-->
                 <div class="card-footer ">
                   <button type="submit" class="btn btn-primary btn-round btn-lg">{{__('ADD APPOINTMENT')}}</button>
                 </div>
@@ -189,48 +190,46 @@
     </div>
   </div>
   @endsection
-@push('js')
+@push('scripts')
+
+<link href=
+'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'
+          rel='stylesheet'>
  
-<!-- Bootstrap Datepicker JavaScript - ->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+ 
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">
+    </script>
+<link rel="stylesheet"   
+href="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"> 
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script>
 
+<script type="text/javascript">
+    $(function () {
+	    $('#datetimepicker1').datepicker({
+            format: 'YYYY-MM-DD HH:mm:ss'
+    });
+	    $('#time').timepicker({
+        timeFormat: 'h:i a',
+        interval: 30,
+        minTime: '6:30am',
+        maxTime: '10:00pm',
+        defaultTime: '6:30',
+        startTime: '6:30',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true,
+        disableTimeRanges: [
+            ['12:00pm', '12:01pm']
+        ]
+    });
 
-  $('#datepicker').datetimepicker({
-    format: 'YYYY-MM-DD',
-    icons: {
-        time: 'fa fa-clock-o',
-        date: 'fa fa-calendar',
-        up: 'fa fa-chevron-up',
-        down: 'fa fa-chevron-down',
-        previous: 'fa fa-chevron-left',
-        next: 'fa fa-chevron-right',
-        today: 'fa fa-crosshairs',
-        clear: 'fa fa-trash',
-        close: 'fa fa-times'
-    }
-});-->
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
-<script>
-  $(function() {
-    $( "#datetimepicker1" ).datetimepicker({
-    format: 'DD/MM/YYYY HH:mm:ss',
-    locale: 'en',
-    sideBySide: true,
-    icons: {
-      up: 'fas fa-chevron-up',
-      down: 'fas fa-chevron-down',
-      previous: 'fas fa-chevron-left',
-      next: 'fas fa-chevron-right'
-    }
-
-  });
-  });
+    });
 </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
 @endpush

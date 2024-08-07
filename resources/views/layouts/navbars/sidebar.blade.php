@@ -4,7 +4,7 @@
 -->
   <div class="logo">
     <a href="" class="simple-text">
-      {{ __('Padmashree Diagnostics') }}
+      {{ __('Padmashree Imaging Services') }}
     </a>
     <a href="" class="card-title"> <!--class="simple-text  justify-content-center"-->
       {{ __('Billing') }}
@@ -42,6 +42,8 @@
             </li>
           </ul>
 	</div>
+	</li>
+	<li>
 	<a data-toggle="collapse" href="#laravelExamplesappt">
             <i class="fab fa-laravel"></i>
           <p>
@@ -57,20 +59,27 @@
           <p>{{ __('New Appointment') }}</p>
         </a>
       </li>
-	<li class="@if ($activePage == 'newappointment') active @endif">
+	<li class="@if ($activePage == 'viewappointment') active @endif">
         <a href="{{ route('viewappointment') }}">
 	  <i class="now-ui-icons tech_tv"></i>
           <p>{{ __('View Appointments') }}</p>
         </a>
       </li>
-	<li class="@if ($activePage == 'newappointment') active @endif">
+	<li class="@if ($activePage == 'viewappointment1') active @endif">
         <a href="{{ route('viewappointment') }}">
           <i class="now-ui-icons ui-2_time-alarm"></i>
           <p>{{ __('Reshcedule/Cancel  Appntmnt') }}</p>
         </a>
       </li>
+	 <li class="@if ($activePage == 'showcalendar') active @endif">
+        <a href="{{ route('showcalendar') }}">
+          <i class="now-ui-icons ui-1_calendar-60"></i>
+          <p>{{ __('Appointments calendar') }}</p>
+        </a>
+      </li>
  	</ul>
-        </div>
+	</div>
+	</li>
       <li class = "@if ($activePage == 'startbilling') active @endif">
         <a href="{{ route('page.index','startbilling') }}">
           <i class="now-ui-icons education_paper"></i>
@@ -83,10 +92,33 @@
           <p>{{ __('Investigations') }}</p>
         </a>
       </li>
-      <li class = " @if ($activePage == 'notifications') active @endif">
-        <a href="{{ route('page.index','notifications') }}">
+	
+        <li class="@if ($activePage == 'paymentslist') active @endif">
+        <a href="{{ route('paymentlist') }}">
+          <i class="now-ui-icons business_money-coins"></i>
+          <p>{{ __('Manage Payments') }}</p>
+        </a>
+      </li>
+	<li>
+	<a data-toggle="collapse" href="#viewreports">
+            <i class="fab fa-laravel"></i>
+          <p>
+            {{ __("View Reports") }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse show" id="viewreports">
+        <ul class="nav">
+      <li class = " @if ($activePage == 'reports') active @endif">
+        <a href="{{ route('page.index','reports') }}">
           <i class="now-ui-icons files_single-copy-04"></i>
           <p>{{ __('Reports') }}</p>
+        </a>
+      </li>
+	<li class = " @if ($activePage == 'balancereports') active @endif">
+        <a href="{{ route('page.index','balancereports') }}">
+          <i class="now-ui-icons files_single-copy-04"></i>
+          <p>{{ __('Balance Reports') }}</p>
         </a>
       </li>
 <!--li class = " @if ($activePage == 'table') active @endif">
@@ -95,6 +127,9 @@
           <p>{{ __('Table Test') }}</p>
         </a>
       </li-->
+	<ul>
+		</div>
+	</li>
     </ul>
   </div>
 </div>

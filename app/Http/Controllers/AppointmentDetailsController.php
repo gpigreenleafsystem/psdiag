@@ -21,7 +21,7 @@ class AppointmentDetailsController extends Controller
 
 	  public function view()
          {
-                 $apdetails= appointment_details::with('patient', 'referer','modality')->get();
+                 $apdetails= appointment_details::with('patient', 'referer','modality')->paginate(10);//->get();
 		 //            return view('pages.viewappointment')->with('apdetails',$apdetails);
 		 return view('pages.viewappointment', compact('apdetails'));
 	  }
@@ -55,7 +55,9 @@ class AppointmentDetailsController extends Controller
         ]);
 
 		// Check if a patient with the provided mobile number exists
-        $patient = Patients::where('mobileno', $validatedData['mobileno'])->first();
+		 $patient = Patients::where('mobileno', $validatedData['mobileno'])
+			 ->where('name', $validatedData['name'])
+			 ->first();
 	//dd($patient->visit_no);
 	if ($patient) {
 		$patient->name = $validatedData['name'];
@@ -120,6 +122,7 @@ class AppointmentDetailsController extends Controller
 	$validatedData = $req->validate([
 		'modality' => 'required|string',
 		'selected_date' => 'required',
+		'selected_time'=>'required',
         //      'date' => 'required|date',
            // 'mobile_number' => 'required|string|unique:referer_details', // Ensure mobile number is unique
             // Add more validation rules as needed
@@ -134,8 +137,14 @@ class AppointmentDetailsController extends Controller
 	$appointment->patient_id = $patient->id;
 	$appointment->modality_id = $modality->id;
 	$appointment->appointment_status = "SCHEDULED";
-	$dt = Carbon::createFromFormat('m/d/Y H:i:s',$validatedData['selected_date'])->format('Y-m-d H:i:s');//Carbon::parse($validatedData['selected_date']);
-    	$appointment->appointment_date = $dt; //->format('Y-m-d H:i:s'); //$validatedData['selected_date'];
+//	$dt = Carbon::createFromFormat('m/d/Y',$validatedData['selected_date'])->format('Y-m-d');//Carbon::parse($validatedData['selected_date']);
+//	$appointment->appointment_date = $dt; //->fiormat('Y-m-d iH:i:s'); //$validatedData['selected_date'];
+	$dateTimeString = $validatedData['selected_date']." ".$validatedData['selected_time'];//.":00";
+//	dd($dateTimeString);
+	$appointment->start_time = Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString)->format('Y-m-d H:i:s');
+	$appointment->appointment_date = $appointment->start_time;
+	$etime=Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString);
+	$appointment->end_time = $etime->addMinutes(30)->format('Y-m-d H:i:s');
     // Set other properties as needed
     $appointment->save();
 
@@ -159,10 +168,17 @@ public function updateappointment(Request $request){
 	//	dd($request->all());
 	$id=$request->id;
 	$aptstatus = $request->appointmentstatus;
-	$dt = Carbon::createFromFormat('m/d/Y H:i:s',$request->selected_date)->format('Y-m-d H:i:s');//Carbon::parse($validatedData['selected_date']);
+//	$dt = Carbon::createFromFormat('m/d/Y H:i:s',$request->selected_date)->format('Y-m-d H:i:s');//Carbon::parse($validatedData['selected_date']);
+	$dateTimeString = $request->selected_date." ".$request->selected_time;
+	$start_time = Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString)->format('Y-m-d H:i:s');
+        $appointment_date = $start_time;
+        $etime=Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString);
+        $end_time = $etime->addMinutes(30)->format('Y-m-d H:i:s');
 appointment_details::where('id','=',$id)->update([
 		'appointment_status'=>$aptstatus,
-		'appointment_date'=>$dt,
+		'appointment_date'=>$appointment_date,
+		'start_time'=>$start_time,
+		'end_time'=>$end_time,
 		
 ]);
  
@@ -172,8 +188,18 @@ return redirect()->to('/viewappointment')->with('success','updated sucessfully')
 
 public function showcalendar()
     {
-        $appointments = Appointment::all();
-        return view('pages.showcalendar', compact('appointments'));
+	    $appointments = appointment_details::all();
+	    foreach ($appointments as $appointment) {
+		    $patient = Patients::findorFail($appointment->patient_id);
+            $events[] = [
+                'title' => $patient->name,
+                'start' => $appointment->start_time,
+                'end' => $appointment->end_time,
+            ];
+        }
+
+	    //        return view('pages.showcalendar', compact('appointments'));
+	    return view('pages.showcalendar', compact('events'));
     }
 
 

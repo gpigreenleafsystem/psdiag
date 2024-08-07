@@ -13,16 +13,21 @@
 @section('content')
 <div class="panel-header panel-header-sm">
   </div>
+<?php if ($apdetails->modality_id == 1) {
+  $mod_type = "CT";
+} elseif ($apdetails->modality_id == 2) {
+  $mod_type = "MRI";
+} ?>
  <div class="content">
     <div class="container">
       <div class="row">
         <!--div class="col-md-5 ml-auto">
           <!--div class="info-area info-horizontal mt-5">
         </div-->
-        <div class="col-md-8  mr-auto">
+        <div class="col-md-12  mr-auto">
           <div class="card card-signup text-center">
             <div class="card-header ">
-              <h4 class="card-title">{{ __('View Appointment') }}</h4>
+              <h4 class="card-title">{{ __('View Appointment') }}  </h4>
             <div class="card-body">
               <form method="POST" action="{{ route('addappointment') }}">
 	      @csrf

@@ -57,8 +57,12 @@
                                                               </td>
 		  </tr>
 		@endforeach
-                              </tbody>
-            </table>
+			      </tbody>
+
+	    </table>
+<div class="d-flex justify-content-center">
+                        {{ $apdetails->links() }}
+                    </div>
 
           </div> <!--card body-->
         </div> <!--card -->

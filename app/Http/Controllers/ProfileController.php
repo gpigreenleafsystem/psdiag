@@ -20,6 +20,11 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
+    public function editnonadmin()
+    {
+        return view('profile.editnonadmin');
+    }
+
     /**
      * Update the profile
      *

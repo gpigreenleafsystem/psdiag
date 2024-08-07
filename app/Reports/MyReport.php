@@ -16,7 +16,7 @@ class MyReport extends \koolreport\KoolReport
         // Let say, you have "sale_database" is defined in Laravel's database settings.
         // Now you can use that database without any futher setitngs.
         $this->src("mysql")
-       ->query("SELECT * FROM bill_details") // , appointment_details,patients_details where bill_details.appointment_id=appointment_details.id and appointment_details.patient_id=patients_details.id")
+       ->query("SELECT * FROM bill_details") //, appointment_details,patients_details where bill_details.appointment_id=appointment_details.id and appointment_details.patient_id=patients_details.id")
        ->pipe($this->dataStore("bill_details"));
 
 
@@ -26,6 +26,6 @@ class MyReport extends \koolreport\KoolReport
 
 	$this->src("mysql")
       ->query("SELECT * FROM patients_details")
-        ->pipe($this->dataStore("patients_details"));
+      ->pipe($this->dataStore("patients_details"));
     }
 }
