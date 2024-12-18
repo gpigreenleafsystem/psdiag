@@ -53,10 +53,12 @@
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="now-ui-icons users_single-02"></i>
             <p>
-              <span class="d-lg-none d-md-block">{{ __("Account") }}</span>
+	      <span class="d-lg-none d-md-block">{{ __("Account") }}</span>
+<span>{{ Auth::user()->name }}</span>
             </p>
           </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+	  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+<a class="dropdown-item" <p><span>{{ Auth::user()->usertype }}</span></p></a>
 @if (Auth::user()->usertype  == 'ADMIN')  
 <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __("My profile") }}</a>
 @endif

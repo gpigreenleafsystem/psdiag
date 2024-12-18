@@ -18,8 +18,12 @@ class BillDetailsController extends Controller
 	{
 		//$apdetails = appointment_details::all();
 		//return view('pages.startbilling', compact('apdetails'));
-		$apdetails_info = appointment_details::all();
-
+	//	$apdetails_info = appointment_details::	all();
+		$apdetails_info = appointment_details::orderBy('created_at', 'DESC')->paginate(10);
+		if($apdetails_info->count()<=0){
+			$aptInfos[] = [];
+			return view('pages.startbilling', compact('aptInfos', 'apdetails_info'));
+		}
 		foreach ($apdetails_info as $data) {
 			$patientdetails = $this->getPatientNameNo($data->patient_id);
 			$parts = explode(',', $patientdetails);
@@ -27,13 +31,15 @@ class BillDetailsController extends Controller
 				'id' => $data->id,
 				'patientName' => $parts[0],
 				'patientNo' => $parts[1],
-				'aptdate' => $data->appointment_date,
+				'aptdate' => Carbon::createFromFormat('Y-m-d H:i:s', $data->appointment_date)->format('d/m/Y H:i:s'),
+				//'aptdate' => $data->appointment_date,
 				'aptstatus' => $data->appointment_status,
 				'billstatus' => $this->checkAppointmentId($data->id),
 				'bill_no' => $this->getBillNo($data->id),
 			];
 		}
-		return view('pages.startbilling', compact('aptInfos'));
+		//return view('pages.startbilling', compact('aptInfos'));
+		return view('pages.startbilling', compact('aptInfos', 'apdetails_info'));
 	}
 	public function newbill($id)
 	{
@@ -46,7 +52,7 @@ class BillDetailsController extends Controller
 	}
 	public function createnewbill(Request $request)
 	{
-
+//dd($request);
 		$patient_name = $request['bill_pt_name'];
 		$patient_no = $request['bill_pt_contactno'];
 		$patient_age = $request['bill_pt_age'];
@@ -68,11 +74,12 @@ class BillDetailsController extends Controller
 		$bill->appointment_id = $apt_id;
 		$bill->required_investigations = "0";
 		$bill->paymentids = 0;
-		$bill->netamount = $total_amount;
-		$bill->bill_amount = $billamount;
-		$bill->bill_discount = $billdiscount;
+		$bill->netamount = $request['totalAmount'];
+		$bill->bill_amount =$request['billedamount'];
+		$bill->bill_discount = $request['billdiscount'];
 		$bill->generated_by = $request['gen_by'];
 		$bill->bill_no = $billNo;
+		//dd($bill);
 		$bill->save();
 		$bill_id = $bill::latest()->first();
 		$billId = $bill_id->id;
@@ -104,6 +111,8 @@ class BillDetailsController extends Controller
 			$investigation->appmt_date = $request['apt_date'];
 			$investigation->modality_type = $scan_type;
 			$investigation->save();
+			$investigation->modality_type = $scan_type;
+			$investigation->save();
 			$investigation_id = $investigation::orderBy('id', 'DESC')->first();
 
 			$tmp .= $investigation_id->id;
@@ -132,9 +141,21 @@ class BillDetailsController extends Controller
 		}
 
 		$latestBillNo = $latestBill->bill_no;
-		$latestNumber = (int) substr($latestBillNo, 6);
+		// Extract the date portion from the latest bill number
+		$latestDate = substr($latestBillNo, 0, 6);
 
-		$newNumber = str_pad($latestNumber + 1, 3, '0', STR_PAD_LEFT);
+		if ($latestDate === $date) {
+			// Continue the sequence from the last bill of today
+			$latestNumber = (int) substr($latestBillNo, 6);
+			$newNumber = str_pad($latestNumber + 1, 3, '0', STR_PAD_LEFT);
+		} else {
+			// If it's a new day, start from 001
+			$newNumber = "001";
+		}
+
+	//	$latestNumber = (int) substr($latestBillNo, 6);
+
+	//	$newNumber = str_pad($latestNumber + 1, 3, '0', STR_PAD_LEFT);
 		return  $date . $newNumber;
 	}
 	public function getBillNo($appointment_id)
@@ -155,5 +176,41 @@ class BillDetailsController extends Controller
 
 		return $patient->name . ',' . $patient->mobileno;
 	}
-}
 
+	public function getAllBill(Request $request)
+	{
+		$allBillInfo = Bill_details::orderBy('created_at', 'DESC')->paginate(50);
+		if($allBillInfo->count()<=0){
+			$allBills[] = [];
+			return view('pages.billList', compact('allBillInfo', 'allBills'));
+		}
+		foreach ($allBillInfo as $data) {
+
+			$patientname = $this->getPatientNameByPhone($data->patient_phoneno);
+
+			$allBills[] =  [
+				'bill_id' => $data->id,
+				'bill_no' => $data->bill_no,
+				'patientName' => $patientname,
+				'patientNo' => $data->patient_phoneno,
+				'bill_date' => $data->created_at,
+				'bill_amount' => $data->netamount,
+				'bill_dueamount' => $data->due_amount
+			];
+		}
+
+		return view('pages.billList', compact('allBillInfo', 'allBills'));
+	}
+
+
+	public function getPatientNameByPhone($phoneNo)
+	{
+		$patient = Patients::where('mobileno', $phoneNo)->first();
+
+		if ($patient) {
+			return $patient->name;
+		}
+
+		return null; // or return a message indicating no patient found
+	}
+}

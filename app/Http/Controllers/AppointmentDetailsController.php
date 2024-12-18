@@ -9,6 +9,7 @@ use App\Models\Referer_details;
 use App\Models\Scanning_details;
 use App\Models\appointment_details;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class AppointmentDetailsController extends Controller
 {
@@ -21,7 +22,8 @@ class AppointmentDetailsController extends Controller
 
 	  public function view()
          {
-                 $apdetails= appointment_details::with('patient', 'referer','modality')->paginate(10);//->get();
+		// $apdetails= appointment_details::with('patient', 'referer','modality')->paginate(10);//->get();
+		 $apdetails = appointment_details::with('patient', 'referer', 'modality')->orderBy('appointment_details.created_at', 'desc')->paginate(50);
 		 //            return view('pages.viewappointment')->with('apdetails',$apdetails);
 		 return view('pages.viewappointment', compact('apdetails'));
 	  }
@@ -31,8 +33,9 @@ class AppointmentDetailsController extends Controller
 		 $apdetails= appointment_details::findOrFail($id);
 		 $patient = Patients::findorFail($apdetails->patient_id);
 		 $referer = Referer_details::findorFail($apdetails->referer_id);
-		 $modality = Scanning_details::findorFail($apdetails->modality_id);
-	//            return view('pages.viewappointmentn')->with('apdetails',$apdetailsonerec);
+		 $modality = ""; //Scanning_details::findorFail($apdetails->modality_id);
+		 //            return view('pages.viewappointmentn')->with('apdetails',$apdetailsonerec);
+		 //dd($referer);
 		 return view('pages.viewappointmentn', compact('apdetails', 'patient','referer','modality'));
           }
 
@@ -43,12 +46,12 @@ class AppointmentDetailsController extends Controller
          }
 
 	 public function addappointment(Request $req){
-	//	dd($req);
+		//dd($req);
 
 		 $validatedData = $req->validate([
             'name' => 'required|string|max:255',
             'age' => 'required|integer',
-	    'gender' => 'required|string|in:male,female',
+	    'gender' => 'required|string|in:Male,Female',
 	    'mobileno'=> 'required|string|min:10|max:10',
 	    'address'=> 'required|string|max:500',
             // Add more validation rules as needed
@@ -84,7 +87,7 @@ class AppointmentDetailsController extends Controller
 // Validate incoming request data
         $validatedData = $req->validate([
 		'drname' => 'required|string|max:255',
-		'drmobileno'=> 'required|string',
+	//	'drmobileno'=> 'required|string',
 	//	'modality' => 'required|string',
 	//	'date' => 'required|date',
            // 'mobile_number' => 'required|string|unique:referer_details', // Ensure mobile number is unique
@@ -110,7 +113,7 @@ class AppointmentDetailsController extends Controller
             // Create new doctor instance
             $doctor = new Referer_details;
             $doctor->referer_name = $validatedData['drname'];
-	    $doctor->referer_phno = $validatedData['drmobileno'];
+	    $doctor->referer_phno = $req->drmobileno;//$validatedData['drmobileno'];
 	    $doctor->referer_count = 1;
 	    $doctor->referer_amount =100;
             // Set other properties as needed
@@ -127,23 +130,25 @@ class AppointmentDetailsController extends Controller
            // 'mobile_number' => 'required|string|unique:referer_details', // Ensure mobile number is unique
             // Add more validation rules as needed
         ]);
-
-	$modality = Scanning_details::where('modality', $validatedData['modality'])->first();
+	if($validatedData['modality']=='CT')
+		$modality=1;
+	else $modality=2;
+//	$modality = Scanning_details::where('modality', $validatedData['modality'])->first();
 //dd($modality);
 //$message = $message + $modality->id;
 
 	$appointment = new appointment_details();
 	$appointment->referer_id = $doctor->id;
 	$appointment->patient_id = $patient->id;
-	$appointment->modality_id = $modality->id;
+	$appointment->modality_id = $modality;
 	$appointment->appointment_status = "SCHEDULED";
 //	$dt = Carbon::createFromFormat('m/d/Y',$validatedData['selected_date'])->format('Y-m-d');//Carbon::parse($validatedData['selected_date']);
 //	$appointment->appointment_date = $dt; //->fiormat('Y-m-d iH:i:s'); //$validatedData['selected_date'];
 	$dateTimeString = $validatedData['selected_date']." ".$validatedData['selected_time'];//.":00";
 //	dd($dateTimeString);
-	$appointment->start_time = Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString)->format('Y-m-d H:i:s');
+	$appointment->start_time = Carbon::createFromFormat('d/m/Y H:i a',$dateTimeString)->format('Y-m-d H:i:s');
 	$appointment->appointment_date = $appointment->start_time;
-	$etime=Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString);
+	$etime=Carbon::createFromFormat('d/m/Y H:i a',$dateTimeString);
 	$appointment->end_time = $etime->addMinutes(30)->format('Y-m-d H:i:s');
     // Set other properties as needed
     $appointment->save();
@@ -153,42 +158,112 @@ $message = "Appointment added successfully";
         //return response()->json(['message' => $message], 200);
 	    $apdetails= appointment_details::all();
 //            return view('pages.viewappointment')->with('apdetails',$apdetails);
-		return view('pages.viewappointment', compact('apdetails', 'message'));
+	//		return view('pages.viewappointment', compact('apdetails', 'message'));
+			return redirect()->to('/viewappointment')->with('success','Appointment added sucessfully');
 	 }
 
 	 public function editappointment($id){
 		 $apdetails= appointment_details::findOrFail($id);
 		 $patient = Patients::findorFail($apdetails->patient_id);
 		 $referer = Referer_details::findorFail($apdetails->referer_id);
-		 $modality = Scanning_details::findorFail($apdetails->modality_id);
+        	$modality="";
+		 //$modality = Scanning_details::findorFail($apdetails->modality_id);
 		 return view('pages.editappointment', compact('apdetails', 'patient','referer','modality'));
 	
 }
 public function updateappointment(Request $request){
-	//	dd($request->all());
+//	dd($request->all());
 	$id=$request->id;
+	//get the apointment details
+	$apdetails = appointment_details::findOrFail($id);
+
+	$validatedData = Validator::make($request->all(), [//[request->validate([
+            'name' => 'required|string|max:255',
+            'age' => 'required|integer',
+            'gender' => 'required|string|in:Male,Female',
+            'mobileno'=> 'required|string|min:10|max:10',
+            'address'=> 'required|string|max:500',
+	    'drname' => 'required|string|max:255',
+	    'scan_type' => 'required|string',
+               // 'selected_date' => 'required',
+               // 'selected_time'=>'required',
+
+	]);
+
+	if ($validatedData->fails()) {
+        return redirect()->back()
+            ->withErrors($validatedData)
+            ->withInput();
+	}
+
+	if($request->appointmentstatus == "RESCHEDULED")
+	{
+		$validatedData = Validator::make($request->all(), [ //$request->validate([
+		'selected_date' => 'required',
+                'selected_time'=>'required',
+
+        ]);
+
+        if ($validatedData->fails()) {
+        return redirect()->back()
+            ->withErrors($validatedData)
+            ->withInput();
+        }
+
+	}
+
+	//update Patient Details
+	$patient=Patients::where('id', '=', $apdetails->patient_id)->update([
+		'name'=>$request->name,
+		'age'=>$request->age,
+		'gender'=>$request->gender,
+		'mobileno'=>$request->mobileno,
+		'address'=>$request->address
+	]);
+	$doctor = Referer_details::where('id','=',$apdetails->referer_id)->update([
+		'referer_name'=>$request->drname,
+		'referer_phno'=>$request->drmobileno
+	]);
+	
+	
+	//update appointment details
+	
 	$aptstatus = $request->appointmentstatus;
-//	$dt = Carbon::createFromFormat('m/d/Y H:i:s',$request->selected_date)->format('Y-m-d H:i:s');//Carbon::parse($validatedData['selected_date']);
+
+	if($request->appointmentstatus == "RESCHEDULED")
+        {
 	$dateTimeString = $request->selected_date." ".$request->selected_time;
-	$start_time = Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString)->format('Y-m-d H:i:s');
+	$start_time = Carbon::createFromFormat('d/m/Y H:i a',$dateTimeString)->format('Y-m-d H:i:s');
         $appointment_date = $start_time;
-        $etime=Carbon::createFromFormat('m/d/Y H:i a',$dateTimeString);
+        $etime=Carbon::createFromFormat('d/m/Y H:i a',$dateTimeString);
         $end_time = $etime->addMinutes(30)->format('Y-m-d H:i:s');
-appointment_details::where('id','=',$id)->update([
+	appointment_details::where('id','=',$id)->update([
+		'modality_id'=>$request->scan_type,
 		'appointment_status'=>$aptstatus,
 		'appointment_date'=>$appointment_date,
 		'start_time'=>$start_time,
 		'end_time'=>$end_time,
 		
-]);
- 
-return redirect()->to('/viewappointment')->with('success','updated sucessfully');
+	]);
+	}
+
+	else{
+
+		appointment_details::where('id','=',$id)->update([
+			'modality_id'=>$request->scan_type,
+			'appointment_status'=>$aptstatus,
+        	]);
+	}
+
+
+	return redirect()->back(); // redirect()->to('/viewappointment')->with('success','updated sucessfully');
     
 }
 
 public function showcalendar()
     {
 	    $appointments = appointment_details::all();
+		if($appointments->count()>0){
 	    foreach ($appointments as $appointment) {
 		    $patient = Patients::findorFail($appointment->patient_id);
             $events[] = [
@@ -196,12 +271,43 @@ public function showcalendar()
                 'start' => $appointment->start_time,
                 'end' => $appointment->end_time,
             ];
-        }
+        }}
+		else $events[] =  [
+			
+		];;
 
 	    //        return view('pages.showcalendar', compact('appointments'));
 	    return view('pages.showcalendar', compact('events'));
     }
 
+public function getappttimes($dt)
+         {
+		 //  $apdetails= appointment_details::all();
+		 //$dt = '2024-08-1'; // Example date in Y-m-d format
+		//dd($dt);
+		$appointments = appointment_details::whereDate('appointment_date', $dt)
+			->where('appointment_status', '!=', 'CANCELLED')
+			 ->whereTime('start_time', '>', '06:00:00')
+			->get(['start_time', 'end_time']);
 
+		$timeSlots = [];
+
+		foreach ($appointments as $appointment) {
+		    $start_time = Carbon::parse($appointment->start_time)->format('H:i');
+    		    $end_time = Carbon::parse($appointment->end_time)->format('H:i');
+
+		    $timeSlots[] = [$start_time, $end_time];
+		}
+		//dd($timeSlots);
+		return $timeSlots;
+           // return view('pages.rescheduleappointment')->with('apdetails',$apdetails);
+}
+
+public function autocomplete(Request $request)
+ {
+	$query = $request->get('query');
+	$doctors = Referer_details::where('referer_name', 'LIKE', "%{$query}%")->pluck('referer_name');
+	return response()->json($doctors);
+}
 
 }

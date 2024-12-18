@@ -17,20 +17,32 @@
 <div class="content">
     <div class="container">
         <div class="row">
-            <div class="col-md-8  mr-auto">
+            <div class="col-md-12 mr-auto">
                 <div class="card card-signup text-center">
                     <div class="card-header ">
-                        <h4 class="card-title">{{ __('Reschedule / Cancel Appointment') }}</h4>
-                        <div class="card-body">
+		<!--	<h4 class="card-title">{{ __('Edit Appointment') }}</h4>-->
+
+
+<h4 class="card-tittle">{{__('Edit Appointment for ')}}  {{__('Scan')}}</h4>
+			<div class="card-body">
+			@if ($errors->any())
+    			<div class="alert alert-danger">
+       			 <ul>
+            		@foreach ($errors->all() as $error)
+                		<li>{{ $error }}</li>
+            		@endforeach
+        		</ul>
+    			</div>
+			@endif
 			    <form method="POST" action="{{route('updateappointment',['id' =>$apdetails->id])}}">
                                 @csrf
-                                <div> Patient Details: </div>
+                                <div style="float:left;"> <h5>Patient Details:</h5> </div>
                                 <!--Begin input name -->
                                 <div class="input-group {{ $errors->has('name') ? ' has-danger' : '' }}">
                                     <div class="input-group-text">
                                         Patient Name:
                                     </div>
-                                    <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Name') }}" type="text" name="name" value="{{ $patient->name }}" disabled>
+                                    <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Name') }}" type="text" name="name" value="{{ $patient->name }}" >
                                     @if ($errors->has('name'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -41,7 +53,7 @@
                                 <div class="input-group {{ $errors->has('age') ? ' has-danger' : '' }}">
                                     <div class="input-group-text" <i class="now-ui-icons tech_mobile"></i>Patient Age:
                                     </div>
-                                    <input class="form-control {{ $errors->has('age') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Age') }}" type="number" name="age" value="{{ $patient->age }}" disabled>
+                                    <input class="form-control {{ $errors->has('age') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Age') }}" type="number" name="age" value="{{ $patient->age }}" >
                                     @if ($errors->has('age'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
                                         <strong>{{ $errors->first('age') }}</strong>
@@ -51,26 +63,26 @@
                                 <div class="input-group {{ $errors->has('age') ? ' has-danger' : '' }}">
                                     <div class="input-group-text" <i class="now-ui-icons tech_mobile"></i>Patient Gender:
                                     </div>
-				    <input class="form-control {{ $errors->has('age') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Age') }}" type="text" name="gender" value="{{ $patient->gender }}" disabled>
-                                    @if ($errors->has('age'))
+				    <!--input class="form-control {{ $errors->has('age') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Age') }}" type="text" name="gender" value="{{ $patient->gender }}" -->
+<!--                                    @if ($errors->has('age'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
                                         <strong>{{ $errors->first('age') }}</strong>
                                     </span>
-                                    @endif
+                                    @endif -->
                                 </div>
-                                <!--div class="input-group">
+                                <div class="input-group">
 		<select class="form-control" name="gender">
 		<option value="0">Select gender</option>
-		<option value="male">Male</option>
-		<option value="female">Female</option>
+		<option value="Male" <?php if( $patient->gender =="Male" || $patient->gender =="male")echo " selected"?> >Male</option>
+		<option value="Female" <?php if( $patient->gender =="Female" || $patient->gender =="female")echo " selected" ?>>Female</option>
 		</select>
 
-	</div-->
+	</div>
                                 <!--Begin input mobileno -->
                                 <div class="input-group {{ $errors->has('mobileno') ? ' has-danger' : '' }}">
                                     <div class="input-group-text" <i class="now-ui-icons tech_mobile"></i>Patient phNumber:
                                     </div>
-                                    <input class="form-control{{ $errors->has('mobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Mobileno') }}" type="number" name="mobileno" value="{{ $patient->mobileno }}" disabled>
+                                    <input class="form-control{{ $errors->has('mobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Mobileno') }}" type="number" name="mobileno" value="{{ $patient->mobileno }}" >
 
 
                                     @if ($errors->has('mobileno'))
@@ -83,7 +95,7 @@
                                 <div class="input-group {{ $errors->has('address') ? ' has-danger' : '' }}">
                                     <div class="input-group-text" <i class="now-ui-icons tech_mobile"></i>Patient Address:
                                     </div>
-                                    <input class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Address') }}" type="text" name="address" value="{{ $patient->address }}" disabled>
+					    <input class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Patient Address') }}" type="text" name="address" value="{{ $patient->address }}" >
                                     @if ($errors->has('address'))
 
 				    <span class="invalid-feedback" style="display: block;" role="alert">
@@ -91,13 +103,13 @@
                                     </span>
                                     @endif
                                 </div>
-                                <div> Referer Details: </div>
+                                <div style="flat:left;"><h5> Referer Details:</h5> </div>
                                 <!--Begin input password -->
                                 <div class="input-group {{ $errors->has('drname') ? ' has-danger' : '' }}">
                                     <div class="input-group-text">
                                         <i class="now-ui-icons users_single-02"></i>Doctor Name:
                                     </div>
-                                    <input class="form-control {{ $errors->has('drname') ? ' is-invalid' : '' }}" placeholder="{{ __('Doctor Name') }}" type="text" name="drname" value={{$referer->referer_name }} disabled>
+                                    <input class="form-control {{ $errors->has('drname') ? ' is-invalid' : '' }}" placeholder="{{ __('Doctor Name') }}" type="text" name="drname" value="{{$referer->referer_name }}" >
                                     @if ($errors->has('drname'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
                                         <strong>{{ $errors->first('drname') }}</strong>
@@ -110,58 +122,74 @@
                                     <div class="input-group-text">
                                         <i class="now-ui-icons tech_mobile"></i>Doctor phNumber:
                                     </div>
-                                    <input class="form-control{{ $errors->has('drmobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('Doctor Mobileno') }}" type="number" name="drmobileno" value="{{ $referer->referer_phno }}" disabled>
+                                    <input class="form-control{{ $errors->has('drmobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('Doctor Mobileno') }}" type="number" name="drmobileno" value="{{ $referer->referer_phno }}" >
 
                                 </div>
-                                <div> Appointment Details: </div>
-                                <div class="input-group {{ $errors->has('drmobileno') ? ' has-danger' : '' }}">
+				<div style"float:left;"><h5> Appointment Details:</h5> </div>
+
+				    <div class="input-group">
+<div class="input-group-text">Scan Type</div>
+
+<select class="form-control" name="scan_type" id="scan_type">
+<option value="1"
+                                            {{ $apdetails->modality_id=='1'?'selected':''}}> CT
+                                        </option>
+                                        <option value="2"
+                                            {{ $apdetails->modality_id=='2'?'selected':''}}> MRI
+                                        </option>
+    
+</select>
+
+</div>				
+<div class="input-group {{ $errors->has('drmobileno') ? ' has-danger' : '' }}">
                                     <div class="input-group-text">
                                         Appointment Date:
-                                    </div>
-                                    <input class="form-control{{ $errors->has('drmobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('DoctorMobileno') }}" type="text" name="drmobileno" value="{{ $apdetails->appointment_date }}" disabled>
+				    </div>
+                                    <input class="form-control{{ $errors->has('aptdate') ? ' is-invalid' : '' }}" placeholder="{{ __('appointment date') }}" type="text" name="aptdate" value="{{ \Carbon\Carbon::parse($apdetails->appointment_date)->format('d-m-Y H:i:s') }}" disabled>
                                 </div>
 
-				<div class="input-group {{ $errors->has('drmobileno') ? ' has-danger' : '' }}">
+				<div class="input-group {{ $errors->has('aptdate') ? ' has-danger' : '' }}">
 
 
                                     <div class="input-group-text">
 					Appointment Status: 
 				
-				   </div> 
+                                    </div>
 
 <select name="appointmentstatus" id="appointmentstatus">
-<option value="SCHEDULED" {{ $apdetails->appointment_status=='SCHEDULED'?'selected':''}}> SCHEDULED</option>
-   <option value="RESCHEDULED" {{ $apdetails->appointment_status =='RESCHEDULED'?'selected':'' }}>RESCHEDULED</option>
-    <option value="COMPLETED" {{ $apdetails->appointment_status=='COMPLETED'?'selected':'' }}>COMPLETED</option>
-<option value="CANCELED" {{$apdetails->appointment_status=='CANCELED'?'selected':''}}>CANCELED</option>
-</select>
+                                        <option value="SCHEDULED"
+                                            {{ $apdetails->appointment_status=='SCHEDULED'?'selected':''}}> SCHEDULED
+                                        </option>
+                                        <option value="RESCHEDULED"
+                                            {{ $apdetails->appointment_status =='RESCHEDULED'?'selected':'' }}>
+                                            RESCHEDULED</option>
+                                        <option value="COMPLETED"
+                                            {{ $apdetails->appointment_status=='COMPLETED'?'selected':'' }}>COMPLETED
+                                        </option>
+                                        <option value="CANCELED"
+                                            {{$apdetails->appointment_status=='CANCELED'?'selected':''}}>CANCELED
+                                        </option>
+                                    </select>
                                </div>
 
-                                <!--div class="input-group">
-                                    <label for="datepicker1">Appointment Date:</label>
-				    <div class="input-group date" id="datepicker" data-target-input="nearest">
+                                <div class="input-group">
+                                    <label for="datepicker" id="datelabel">Appointment Date:</label>
+                                    <div class="input-group date" id="datepick" data-target-input="nearest">
                                         <input type="text" id="datetimepicker1" class="form-control datetimepicker-input" name="selected_date" />
                                         <div class="input-group-append" data-target="#datepicker" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
                                     </div>
-				</div-->
+				</div>
 <div class="input-group">
-    <label for="datepicker">Select Date:</label>
-    <div class="input-group date" id="datepick" data-target-input="nearest">
-        <input type="text" id="datetimepicker1" class="form-control datetimepicker-input"  name="selected_date" />
-        <div class="input-group-append" data-target="#datepicker" >
-            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-        </div>
-    </div>
-</div>
-<div class="input-group">
- <label for="time">Select Time:</label>
+ <label for="time" id="timelabel">Select Time: (Please select 6:00 am for walkin appointments)</label>
 <div class="input-group" id="timediv" >
 	<input type="text" id="time" class=" form-control bfh-timepicker"  name="selected_time" />
 <div class="input-group-append" data-target="#time" >
             <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
 	</div>
+</div>
+
 </div>
 
                                 <div class="card-footer ">
@@ -176,33 +204,22 @@
         </div>
     </div>
     @endsection
+    @push('js')
 
 
 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 
-<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+    
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<script src="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/a549aa8780dbda16f6cff545aeabc3d71073911e/src/js/bootstrap-datetimepicker.js"></script>
-    <script>
-        $(function() {
-            $("#datetimepicker1").datetimepicker({
-                format: 'DD/MM/YYYY HH:mm:ss',
-                locale: 'en',
-                sideBySide: true,
-                icons: {
-                    up: 'fas fa-chevron-up',
-                    down: 'fas fa-chevron-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right'
-                }
 
-            });
-        });
-    </script-->
 
 @push('scripts')
 
@@ -220,64 +237,151 @@
 <link rel="stylesheet"   
 href="//cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"> 
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"></script-->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script>
 
-<script type="text/javascript">
-    $(function () {
-	    $('#datetimepicker1').datepicker({
-            format: 'YYYY-MM-DD HH:mm:ss'
+	<script type="text/javascript">
+	function convertDateString(dateString) {
+    // Split the date string into parts
+    var parts = dateString.split('/');
+
+    // Rearrange and format the parts as yyyy-mm-dd
+    var formattedDate = parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
+
+
+
+    return formattedDate;
+}
+ function roundToNext30Minutes(date) {
+        var minutes = date.getMinutes();
+        var roundedMinutes = (Math.ceil(minutes / 30) * 30) % 60; // Round up to the next 30
+        date.setMinutes(roundedMinutes);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+
+        // If rounding pushed us to the next hour, increment the hour
+        if (roundedMinutes === 0) {
+          date.setHours(date.getHours() + 1);
+        }
+
+        return date;
+      }
+
+
+     $('#appointmentstatus').change(function() {
+        if ($(this).val() === 'COMPLETED' ||  $(this).val() === 'CANCELED') {
+            $('#datetimepicker1').closest('.input-group').hide();
+	    $('#time').closest('.input-group').hide();
+	    $('#timelabel').hide();
+	     $('#datelabel').hide();
+        } else {
+            $('#datetimepicker1').closest('.input-group').show();
+	    $('#time').closest('.input-group').show();
+	    $('#timelabel').show();
+	     $('#datelabel').show();
+        }
     });
-	    $('#time').timepicker({
+
+    // Trigger the change event on page load to handle pre-selected status
+    $('#appointmentstatus').trigger('change');
+
+    var pair = [];
+var mintime='6:00am';
+$(function () {
+    var todaydate = new Date();
+	    $('#datetimepicker1').datepicker({
+	 //       formatDate: 'DD/MM/YYYY',
+	   dateFormat: 'dd/mm/yy', 
+
+	    startDate:new Date(),
+		    minDate:todaydate,
+		   onSelect: function(dateText) {
+			   console.log("Selected date: " + convertDateString(dateText) + "; input's current value: " + this.value);
+//	var selected = new Date(dateText);
+			   var today = new Date();
+			   var day = String(today.getDate()).padStart(2, '0'); // Get day (2 digits)
+var month = String(today.getMonth() + 1).padStart(2, '0'); // Get month (2 digits, January is 0 so add 1)
+var year = String(today.getFullYear()); // Get last 2 digits of the year
+
+// Format to dd/mm/yy
+var formattedDate = `${day}/${month}/${year}`;
+          
+          // Remove time information from today's date for comparison
+          today.setHours(0, 0, 0, 0);
+   pair=[];        
+          // Check if selected date is today
+          if (dateText == formattedDate) {
+		  // If today, set minTime to current time
+		  mintime = roundToNext30Minutes(new Date());
+		  pair.push(["6:30",mintime]);
+ //           $('#time').timepicker('option', 'minTime', mintime);
+          } else {
+		  // If future date, reset minTime
+		  mintime='6:00am';
+            $('#time').timepicker('option', 'minTime', '6:00am');
+	  }
+
+//initializeTimepicker(); 
+	 $.ajax({
+            type: "GET",
+//          url: "/getappointmenttimes/"+convertDateString(dateText),
+	    url: "/getappointmenttimes/"+convertDateString(dateText),	
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+	    success: function (response) {
+		   // alert(response);
+                for (var i = 0; i < response.length; i++) {
+                    /*var hour = response.d[i].split(' ')[0].split(':')[0];
+                    var min = parseInt(response.d[i].split(' ')[0].split(':')[1]) + 1;
+                    min = min < 10 ? '0' + min : min;
+                    var ampm = response.d[i].split(' ')[1];
+                    var start = response.d[i];
+		    var end = hour + ':' + min + ' ' + ampm;
+		    pair.push([start, end]);*/
+		//	alert(response[i]);
+			pair.push(response[i]);
+
+		}
+		//pair.push(["7:30",mintime]);
+		//alert(pair);
+		initializeTimepicker();
+            }
+        });
+		   },
+		   
+		  
+});
+
+
+
+
+initializeTimepicker();
+
+});
+
+function initializeTimepicker() {
+ //   $('#time').timepicker('destroy'); // Destroy the existing timepicker instance
+ $('#time').timepicker({
         timeFormat: 'h:i a',
         interval: 30,
-        minTime: '6:30am',
+        minTime: '6:00am',
         maxTime: '10:00pm',
         defaultTime: '6:30',
-        startTime: '6:30',
+        startTime: '6:00am',
         dynamic: false,
         dropdown: true,
         scrollbar: true,
-        disableTimeRanges: [
+       /* disableTimeRanges: [
             ['12:00pm', '12:01pm']
-        ]
-    });
+        ],*/
+        'disableTimeRanges': pair
+});
 
-    });
+}
+
+
 </script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 
 @endpush
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      

@@ -57,7 +57,7 @@
                       <i class="now-ui-icons objects_key-25"></i>
                     </div>
                   </div>
-                  <input class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}" type="password" name="password" value="{{$user->password}}"  required>
+                  <input class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}" type="password" name="password" value="{{$user->password}}" onchange="enableeditpwd()" required>
                   @if ($errors->has('password'))
                     <span class="invalid-feedback" style="display: block;" role="alert">
                       <strong>{{ $errors->first('password') }}</strong>
@@ -82,7 +82,7 @@
 </select>
 
 </div>
-
+  <input type="hidden" name="pwdedited" id="pwdedited" value="0">
                 <div class="card-footer ">
 		  <button type="submit" class="btn btn-primary btn-round btn-lg">{{__('SAVE')}}</button>
 <a href="{{url('usermanagement')}}" class="btn btn-danger btn-round btn-lg">Back</a>
@@ -95,6 +95,12 @@
       </div>
     </div>
   </div>
-@endsection
+  @endsection
+  <script>
+    function enableeditpwd() {
+        event.preventDefault(); // Prevent form submission
+        document.getElementById('pwdedited').value = 1;
+    }
+    </script>
 
 

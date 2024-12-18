@@ -1,7 +1,7 @@
 @extends('layouts.app', [
     'namePage' => 'Appointments List',
     'class' => 'sidebar-mini',
-    'activePage' => 'viewappointment',
+    'activePage' => 'startbilling',
   ])
 
 @section('content')
@@ -32,7 +32,7 @@
                             </tr>
                         </thead>
                         <tbody>
-
+<?php if($apdetails_info->count()>0) { ?>
                             @for ($i = 0; $i < count($aptInfos); $i++) <tr>
                                 <td>{{ $aptInfos[$i]['patientName'] }}</td>
                                 <td>{{ $aptInfos[$i]['patientNo'] }}</td>
@@ -72,8 +72,12 @@
 
                                 </tr>
                                 @endfor
-                        </tbody>
-                    </table>
+
+<?php } ?>                              </tbody>
+		    </table>
+ <div>
+                        {{ $apdetails_info->links() }}
+                    </div>
 
 	
 

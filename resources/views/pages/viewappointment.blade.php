@@ -11,15 +11,37 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header">
+	  <div class="card-header">
+  <a class="btn btn-primary btn-round text-white pull-right" href="{{url('newappointment')}}">Add
+                        Appointment</a>
+
 	    <h4 class="card-title"> Appointments</h4>
 		@if(isset($message))
 		 <div class="alert alert-success">
 		<p>{{ $message }}</p>
 		</div>
 		@endif
-          </div>
+		              </div>
 	  <div class="card-body">
+
+<div>
+                        <form action="appointmentsearch" method="POST" role="search">
+                            {{ csrf_field() }}
+                            <div class="form-inline float-right">
+                                <input type="text" class="form-control mb-2 mr-sm-2" name="q"
+                                    placeholder="Search By Patient name">
+
+                                <button type="submit" class="btn btn-primary " style="margin-top:-2px;">{{__('Search')}}
+                                </button>
+                                <a href="{{ route('viewappointment') }}" class="btn pull-right" style="margin-top:-2px;">
+                                    {{ __("Clear Search") }}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+
+
 
 	<table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
               <thead>
@@ -42,7 +64,7 @@
                         <img src="{{asset('assets')}}/img/default-avatar.png" alt="" style="max-width: 80px; border-radiu: 100px">
                       </span--> {{ $data->patient->name }}
                     </td>
-                    <td>{{$data->appointment_date}}</td>
+                    <td>{{\Carbon\Carbon::parse($data->appointment_date)->format('d/m/Y H:i:s')}}</td>
                     <td>{{$data->appointment_status}}</td>
 		    <!--td></td>
 		<td>2dsa</td>

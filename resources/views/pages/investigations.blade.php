@@ -30,21 +30,23 @@
                   <th class="disabled-sorting text-right">Actions</th>
                 </tr>
 	      </thead>
+<?php $i=0;?>
 	@foreach($invdet as $data)
+<?php $i++;?>
 		<tr>
                     <td>
                       <!--span class="avatar avatar-sm rounded-circle">
                         <img src="{{asset('assets')}}/img/default-avatar.png" alt="" style="max-width: 80px; border-radiu: 100px">
-                      </span--> {{ $data->modality_id }}
+			</span--> <?php echo $i;?>
                     </td>
                     <td>{{$data->study}}</td>
                     <td>{{$data->qty}}</td>
-		    <td></td>
-		<td>2dsa</td>
-		<td>2dsa</td>
-		<td>2dsa</td>
-		<td>2dsa</td>
-                      <td class="text-right">
+		    <td>{{$data->amount}}</td>
+<td>{{$data->rate}}</td>
+		<td>{{$data->discount}}</td>
+		<td>{{$data->report_status}}</td>
+		<td>{{$data->scanning_status}}</td>
+		 <td class="text-right">
                                              <a type="button" href="#" rel="tooltip" class="btn btn-success btn-icon btn-sm " data-original-title="" title="">
                         <i class="now-ui-icons ui-2_settings-90"></i>
                       </a>

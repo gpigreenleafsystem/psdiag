@@ -25,7 +25,23 @@
                     <div class="card-body">
                         <div class="toolbar">
                             <!--        Here you can write extra buttons/actions for the toolbar              -->
-                        </div>
+			</div>
+			<div>
+                        <form action="usersearch" method="POST" role="search">
+                            {{ csrf_field() }}
+                            <div class="form-inline float-right">
+                                <input type="text" class="form-control mb-2 mr-sm-2" name="q"
+                                    placeholder="Search By user name">
+
+                                <button type="submit" class="btn btn-primary " style="margin-top:-2px;">{{__('Search')}}
+                                </button>
+                                <a href="{{ route('usermanagement') }}" class="btn pull-right" style="margin-top:-2px;">
+                                    {{ __("Clear Search") }}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
 
                         <table id="datatable" class="table table-hover table-bordered" cellspacing="0" width="100%">
                             <thead>

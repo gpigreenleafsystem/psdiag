@@ -11,6 +11,7 @@ class part_payment_details extends Model
 	protected $table = 'part_payment_details';
 
 	protected $fillable=[
+			'payment_type',
 		'payment_mode',
 		'bill_no',
 		'payment_status',

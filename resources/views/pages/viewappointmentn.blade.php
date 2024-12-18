@@ -27,7 +27,7 @@
         <div class="col-md-12  mr-auto">
           <div class="card card-signup text-center">
             <div class="card-header ">
-              <h4 class="card-title">{{ __('View Appointment') }}  </h4>
+	    <h4 class="card-title">{{ __('View Appointment') }} for <?php echo $mod_type ?> Scan </h4>
             <div class="card-body">
               <form method="POST" action="{{ route('addappointment') }}">
 	      @csrf
@@ -111,7 +111,7 @@
                     <div class="input-group-text">
                       <i class="now-ui-icons users_single-02"></i>Doctor Name:
                     </div>
-                  <input class="form-control {{ $errors->has('drname') ? ' is-invalid' : '' }}" placeholder="{{ __('Doctor Name') }}" type="text" name="drname" value= {{$referer->referer_name }} disabled>
+                  <input class="form-control {{ $errors->has('drname') ? ' is-invalid' : '' }}" placeholder="{{ __('Doctor Name') }}" type="text" name="drname" value="{{$referer->referer_name }}" disabled>
                   @if ($errors->has('drname'))
                     <span class="invalid-feedback" style="display: block;" role="alert">
                       <strong>{{ $errors->first('drname') }}</strong>
@@ -132,7 +132,7 @@
                     <div class="input-group-text">
                       Appointment Date:
                     </div>
-		  <input class="form-control{{ $errors->has('drmobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('DoctorMobileno') }}" type="text" name="drmobileno" value="{{ $apdetails->appointment_date }}" disabled>
+		  <input class="form-control{{ $errors->has('drmobileno') ? ' is-invalid' : '' }}" placeholder="{{ __('DoctorMobileno') }}" type="text" name="drmobileno" value="{{ \Carbon\Carbon::parse($apdetails->appointment_date )->format('d/m/Y H:i:s') }}" disabled>
 </div>
 
 <div class="input-group {{ $errors->has('drmobileno') ? ' has-danger' : '' }}">

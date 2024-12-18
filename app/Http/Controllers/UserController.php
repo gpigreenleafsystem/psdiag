@@ -44,15 +44,15 @@ public function createuser(Request $request){
 	$email = $request->email;
 	$password = $request->password;
 	$usertype = $request->usertype;
-
+//dd($request);
 
 	$user = new User();
 	$user->name = $name;
 	$user->email= $email;
-	$user->password= Hash::make('$password');
+	$user->password=Hash::make( $password);
 	$user->usertype= $usertype;
 	$user->save();
-
+//dd($user);
 	return redirect()->to('/usermanagement')->with('success','User added sucessfully');
 }
     public function edituser($id){
@@ -65,15 +65,31 @@ public function updateuser(Request $request){
 	$id=$request->id;
 	$name = $request->name;
 	$email = $request->email;
-	$password = $request->password;
+	$password =Hash::make( $request->password);
 	$usertype = $request->usertype;
+	$changepwd = $request->pwdedited;
+		if ($request->pwdedited == 1) {
 
-	User::where('id','=',$id)->update([
+			User::where('id', '=', $id)->update([
+				'name' => $name,
+				'email' => $email,
+				'password' => $password,
+				'usertype' => $usertype
+			]);
+		} else {
+			User::where('id', '=', $id)->update([
+				'name' => $name,
+				'email' => $email,
+				'usertype' => $usertype
+			]);
+		}
+
+	/*User::where('id','=',$id)->update([
 		'name'=>$name,
 		'email'=>$email,
 		'password'=>$password,
 		'usertype'=>$usertype
-	]);
+	]);*/
 
 	return redirect()->to('/usermanagement')->with('success','User updated sucessfully');
 }

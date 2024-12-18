@@ -46,8 +46,9 @@ $tot_amt = substr($array[0], strpos($array[0], "=") + 1);
                                     Mode</label>
                                 <div class="col-sm-5">
                                     <select name="payment_mode" id="payment_mode" class="form-control">
-                                        <option value="full">Full Payment</option>
-                                        <option value="partial">Part Payment</option>
+                                        <option value="1">Full Payment</option>
+					<option value="2">Part Payment</option>
+<option value="3">Credit Payment</option>
                                     </select>
                                 </div>
                             </div>
@@ -58,9 +59,10 @@ $tot_amt = substr($array[0], strpos($array[0], "=") + 1);
                                     <select name="payment_method" id="payment_method" class="form-control">
                                         <option value=" netbanking">Netbanking</option>
                                         <option value="upi">UPI</option>
-                                        <option value="debit_card">Debit card</option>
-					<option value="cc">Credit card</option>
+                                        <option value="cheque">Cheque</option>
+i					<option value="cc">Credit/Debit card</option>
 					<option value="cash">Cash</option>
+					<option value="credit">Credit</option>
                                         <!-- Add more options as needed -->
                                     </select>
                                 </div>
@@ -70,21 +72,21 @@ $tot_amt = substr($array[0], strpos($array[0], "=") + 1);
                                 </label>
                                 <div class="col-sm-5">
                                     <input type="number" class="form-control" name="partial_amount"
-                                        placeholder="Enter Amount">
+                                        placeholder="Enter Amount" id="partial_amount">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="payment_details" class="col-sm-5 col-form-label">Payment details</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="payment_details"  placeholder="Enter Payment details"
-                                        class="form-control">
+                                        class="form-control" id="payment_details">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="payment_method" class="col-sm-5 col-form-label">Payment status</label>
+                                <label for="payment_status" class="col-sm-5 col-form-label">Remarks</label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="payment_status" placeholder="Enter Payment details"
-                                        class="form-control">
+				    <input type="text" name="payment_status" id=
+"payment_status"  placeholder="Enter Remarks"  class="form-control" value="-">
                                 </div>
                             </div>
 
@@ -121,7 +123,8 @@ $tot_amt = substr($array[0], strpos($array[0], "=") + 1);
 
                                 <?php foreach ($payids as $payment) { ?>
                                 <tr>
-                                    <td><?php echo $payment->created_at; ?></td>
+				    <!--<td><?php echo $payment->created_at; ?></td>-->
+					<td><?php echo DATE_FORMAT($payment->created_at, 'd/m/Y H:i:s')?></td>
                                     <td><?php echo $payment->partpayment_amount ?></td>
                                     <td><?php echo $payment->payment_mode ?>
                                     </td>
@@ -147,3 +150,22 @@ $tot_amt = substr($array[0], strpos($array[0], "=") + 1);
     </div>
 </div>
 @endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Using jQuery
+$(document).ready(function() {
+    $('#payment_method').on('change', function() {
+
+        if ($(this).val() === 'cash') {
+		$('#payment_status').val('-'); // Set the value to '-'
+	$('#payment_details').val('-'); // Set the value to '-'
+	}
+	if ($(this).val() === 'credit') {
+            $('#partial_amount').val(0.00);
+            $('#payment_details').val('-'); // Set the value to '-'
+            $('#payment_status').val('-'); // Set the value to '-'
+        }
+    });
+});
+</script>
+

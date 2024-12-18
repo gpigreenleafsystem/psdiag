@@ -39,6 +39,7 @@
                     <span class="input-group-prepend">
                     <div class="input-group-text">
                         <i class="now-ui-icons users_circle-08"></i>
+                        
                     </div>
                     </span>
                     <input class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" type="email" name="email" value="{{ old('email', 'admin@nowui.com') }}" required autofocus>

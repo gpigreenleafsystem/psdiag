@@ -189,11 +189,11 @@
                                         <tr>
                                             <td colspan="7" class="text-right font-weight-bold">Total Amount</td>
                                             <td><input type="number" class="form-control" id="totalAmount"
-						    name="totalAmount" readonly>
- <input type="text" class="form-control" id="billedamount"
-                                                name="billedamount" readonly>
-                                            <input type="text" class="form-control" id="billdiscount"
-                                                name="billdiscount" readonly>
+						    name="totalAmount" >
+
+
+
+
                                             </td>
                                             <td></td>
                                         </tr>
@@ -306,7 +306,7 @@ function fetchInvestigations(selectElement, rowId) {
     //alert(scanType);
     if (scanType) {
         $.ajax({
-	url: `http://www.modulecoders.com/psdiag/public/get-investigations/${scanType}`,
+	url: `/get-investigations/${scanType}`,
             type: 'GET',
             success: function(response) {
                 // alert(response);
@@ -327,7 +327,10 @@ function fetchInvestigations(selectElement, rowId) {
 
 function updateRate(selectElement, rowId) {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
-    const rate = selectedOption.getAttribute('data-cost');
+    const rate = selectedOption.getAttribute('data-cost')
+	      if (rate == 0) {
+        document.querySelector(`#calcTable tbody tr:nth-child(${rowId}) .rate`).readOnly = false;
+    };
     document.querySelector(`#calcTable tbody tr:nth-child(${rowId}) .rate`).value = rate;
     calculateAmount(selectElement);
 }
